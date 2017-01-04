@@ -12,16 +12,6 @@ public class OptimizedNode extends Node<String, OptimizedNode> {
     }
 
     /**
-     * Used only when building the optimized Suffix Trie.
-     *
-     * @param nodeEdges SuffixNode children of the SuffixNode
-     */
-    private OptimizedNode(Map<String, OptimizedNode> nodeEdges) {
-        setNodeEdges(nodeEdges);
-    }
-
-    /**
-     * Using Ukkonen algorithm.
      *
      * @param word The word to build Suffix Trie of.
      */
