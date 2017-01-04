@@ -64,7 +64,7 @@ public interface SuffixTrie {
      String longestSubstring(String givenWord);
 
     /**
-     * Display the edu.um.SuffixTrie.SuffixTrie using breath-first search algorithm.
+     * Display Suffix Trie. Style inspired by linux tree folder structure command.
      */
     void show();
 }

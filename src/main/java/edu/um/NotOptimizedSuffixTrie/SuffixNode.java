@@ -1,6 +1,7 @@
 package edu.um.NotOptimizedSuffixTrie;
 
 import edu.um.SuffixTrie.Node;
+import java.util.Map;
 
 /**
  * Created by dylan on 02/12/2016.
@@ -29,6 +30,20 @@ public class SuffixNode extends Node<Character, SuffixNode> {
                 getNodeEdges().put(currentLetter, new SuffixNode());
                 getNodeEdges().get(currentLetter).buildPartOfTheSuffixTrie(tail(word));
             }
+        }
+    }
+
+    public void printTrie(String line, boolean isTail, Character name) {
+        int counter = 0;
+
+        System.out.println(line + (isTail ? "└── " : "├── ") + name);
+        for (Map.Entry<Character, SuffixNode> entry : getNodeEdges().entrySet()) {
+            if (counter == getNodeEdges().size() - 1) {
+                entry.getValue().printTrie(line + (isTail ? "    " : "│   "), true, entry.getKey());;
+            } else {
+                entry.getValue().printTrie(line + (isTail ? "    " : "│   "), false, entry.getKey());
+            }
+            counter++;
         }
     }
 

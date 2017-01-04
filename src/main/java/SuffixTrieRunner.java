@@ -9,6 +9,7 @@ import java.io.*;
 public class SuffixTrieRunner {
     public static void main(String[] args) {
         try {
+            // TODO no arguments passed
             BufferedReader bufferedReader = new BufferedReader(new FileReader(args[0]));
             SuffixTrieRunner suffixTreeRunner = new SuffixTrieRunner();
 

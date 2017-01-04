@@ -166,15 +166,16 @@ public class SuffixTrieImpl implements SuffixTrie {
     }
 
     public void show() {
-        Queue<Map<Character, SuffixNode>> allPossible = new LinkedList<>();
-        allPossible.add(getHead().getNodeEdges());
+        int counter = 1;
 
-        while (!allPossible.isEmpty()) {
-            Map<Character, SuffixNode> childNodes = allPossible.remove();
-            for (Map.Entry<Character, SuffixNode> entry : childNodes.entrySet()) {
-                System.out.print(entry.getKey() + " ");
-                allPossible.add(entry.getValue().getNodeEdges());
+        System.out.println("All the characters show the edge between 2 nodes");
+        for (Map.Entry<Character, SuffixNode> entry : head.getNodeEdges().entrySet()) {
+            if (counter == head.getNodeEdges().size()) {
+                entry.getValue().printTrie("", true, entry.getKey());
+            } else {
+                entry.getValue().printTrie("", false, entry.getKey());
             }
+            counter++;
         }
     }
 

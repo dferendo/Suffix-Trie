@@ -43,6 +43,15 @@ public class OffsetLengthKey implements Comparable<OffsetLengthKey> {
         return result;
     }
 
+    /**
+     * Used to print key. Will be mostly used for show function.
+     * @return String containing the key elements.
+     */
+    @Override
+    public String toString() {
+        return "[" + offset + ", " + length + "]";
+    }
+
     public Integer getOffset() {
         return offset;
     }
