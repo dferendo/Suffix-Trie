@@ -8,7 +8,7 @@ public class OffsetLengthKey implements Comparable<OffsetLengthKey> {
     private final Integer offset;
     private final Integer length;
 
-    public OffsetLengthKey(Integer offset, Integer length) {
+    public OffsetLengthKey(final Integer offset, final Integer length) {
         this.offset = offset;
         this.length = length;
     }
@@ -19,7 +19,7 @@ public class OffsetLengthKey implements Comparable<OffsetLengthKey> {
      * @return 1 if this is greater, -1 otherwise
      */
     @Override
-    public int compareTo(OffsetLengthKey o) {
+    public int compareTo(final OffsetLengthKey o) {
         if (this.offset > o.offset) {
             return 1;
         } else {
@@ -28,7 +28,7 @@ public class OffsetLengthKey implements Comparable<OffsetLengthKey> {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (!(o instanceof OffsetLengthKey)) return false;
         OffsetLengthKey key = (OffsetLengthKey) o;

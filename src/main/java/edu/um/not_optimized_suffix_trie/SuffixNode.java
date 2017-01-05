@@ -4,7 +4,7 @@ import edu.um.suffix_trie.Node;
 import java.util.Map;
 
 /**
- * Created by dylan on 02/12/2016.
+ * Node holds 1 character for every edge.
  */
 public class SuffixNode extends Node<Character, SuffixNode> {
 
@@ -18,12 +18,12 @@ public class SuffixNode extends Node<Character, SuffixNode> {
      * The new node is passed to the method and the tail of the word is given again.
      * @param word The word needed to be build.
      */
-    public void buildPartOfTheSuffixTrie(String word) {
+    public void buildPartOfTheSuffixTrie(final String word) {
         if (word.isEmpty()) {
             getNodeEdges().put(TERMINAL_CHARACTER, new SuffixNode());
         } else {
-            Character currentLetter = head(word);
-            SuffixNode nextNode = getNodeEdges().get(currentLetter);
+            final Character currentLetter = head(word);
+            final SuffixNode nextNode = getNodeEdges().get(currentLetter);
             if (nextNode != null) {
                 nextNode.buildPartOfTheSuffixTrie(tail(word));
             } else {
@@ -33,25 +33,26 @@ public class SuffixNode extends Node<Character, SuffixNode> {
         }
     }
 
-    public void printTrie(String line, boolean isTail, Character key) {
+    @Override
+    public void printTrie(final String line, final boolean isLast, final Character key) {
         int counter = 0;
 
-        System.out.println(line + (isTail ? "└── " : "├── ") + key);
-        for (Map.Entry<Character, SuffixNode> entry : getNodeEdges().entrySet()) {
+        System.out.println(line + (isLast ? "└── " : "├── ") + key);
+        for (final Map.Entry<Character, SuffixNode> entry : getNodeEdges().entrySet()) {
             if (counter == getNodeEdges().size() - 1) {
-                entry.getValue().printTrie(line + (isTail ? "    " : "│   "), true, entry.getKey());;
+                entry.getValue().printTrie(line + (isLast ? "    " : "│   "), true, entry.getKey());;
             } else {
-                entry.getValue().printTrie(line + (isTail ? "    " : "│   "), false, entry.getKey());
+                entry.getValue().printTrie(line + (isLast ? "    " : "│   "), false, entry.getKey());
             }
             counter++;
         }
     }
 
-    private Character head(String list) {
+    private Character head(final String list) {
         return list.charAt(0);
     }
 
-    private String tail(String list) {
+    private String tail(final String list) {
         return list.substring(1);
     }
 

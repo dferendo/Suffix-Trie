@@ -1,32 +1,41 @@
 package edu.um.optimized_suffix_trie;
 
-import edu.um.exceptions.WordContainsTerminalCharacter;
+import com.sun.istack.internal.Nullable;
+import edu.um.exception.WordContainsTerminalCharacterException;
 import edu.um.suffix_trie.Node;
 import edu.um.suffix_trie.SuffixTrie;
 import javafx.util.Pair;
 
 import java.util.*;
 
+import static edu.um.optimized_suffix_trie.OffsetLengthNode.offsetLengthToString;
+
 /**
- * Created by dylan on 25/12/2016.
+ * Optimized Suffix Trie using offset, length.
  */
 public class OptimizedSuffixTrieImpl implements SuffixTrie {
 
     private OffsetLengthNode head;
     private String word;
 
-    public OptimizedSuffixTrieImpl(final String word) throws WordContainsTerminalCharacter {
+    public OptimizedSuffixTrieImpl(final String word) throws WordContainsTerminalCharacterException {
         if (word.contains(Character.toString(Node.TERMINAL_CHARACTER))) {
-            throw new WordContainsTerminalCharacter();
+            throw new WordContainsTerminalCharacterException();
         }
         this.word = word + Node.TERMINAL_CHARACTER;
-        buildSuffixTrie(word);
+        buildSuffixTrie(this.word);
     }
 
-    public void buildSuffixTrie(String word) {
-        OptimizedNode stringHead = buildSuffixTrieWithString(word);
+    /**
+     * The Suffix Trie is built by first building {@link OptimizedNode OptimizedNode} and then
+     * using it to transfer to {@link OffsetLengthNode OffsetLengthNode}.
+     * @param word The given word
+     */
+    @Override
+    public void buildSuffixTrie(final String word) {
+        final OptimizedNode stringHead = buildSuffixTrieWithString(word);
         head = new OffsetLengthNode();
-        head.buildOptimizedSuffixTrie(stringHead, word + Node.TERMINAL_CHARACTER, "");
+        head.buildOptimizedSuffixTrie(stringHead, word);
     }
 
     private OptimizedNode buildSuffixTrieWithString(String word) {
@@ -40,15 +49,16 @@ public class OptimizedSuffixTrieImpl implements SuffixTrie {
         return head;
     }
 
-    public boolean substring(String word) {
+    @Override
+    public boolean substring(final String word) {
         return substringImpl(head, word);
     }
 
-    private boolean substringImpl(OffsetLengthNode currentSuffixNode, String subStringWord) {
+    private boolean substringImpl(final OffsetLengthNode currentSuffixNode, final String subStringWord) {
         if (subStringWord.isEmpty()) {
             return true;
         } else {
-            Pair<OffsetLengthNode, String> nextNode = nextTraverse(currentSuffixNode, word, subStringWord);
+            final Pair<OffsetLengthNode, String> nextNode = nextTraverse(currentSuffixNode, subStringWord);
             if (nextNode != null) {
                 return substringImpl(nextNode.getKey(), nextNode.getValue());
             } else {
@@ -57,38 +67,29 @@ public class OptimizedSuffixTrieImpl implements SuffixTrie {
         }
     }
 
-    public boolean suffix(String word) {
-        return suffixImpl(head, word + Node.TERMINAL_CHARACTER);
+    @Override
+    public boolean suffix(final String word) {
+        return substringImpl(head, word + Node.TERMINAL_CHARACTER);
     }
 
-    private boolean suffixImpl(OffsetLengthNode currentSuffixNode, String subStringWord) {
-        if (subStringWord.isEmpty()) {
-            return true;
-        } else {
-            Pair<OffsetLengthNode, String> nextNode = nextTraverse(currentSuffixNode, word, subStringWord);
-            if (nextNode != null) {
-                return suffixImpl(nextNode.getKey(), nextNode.getValue());
-            } else {
-                return false;
-            }
-        }
-    }
-
-    public int count(String word) {
+    @Override
+    public int count(final String word) {
         return countImpl(head, word);
     }
 
-    private int countImpl(OffsetLengthNode currentSuffixNode, String subStringWord) {
+    private int countImpl(final OffsetLengthNode currentSuffixNode,final String subStringWord) {
         // Traverse until the given word is empty.
         if (subStringWord.isEmpty()) {
-            // If the program is here, there is at least 1 count.
+            // If the program is here, there is at least 1 count even though the Node
+            // has no children. This is because the Node containing the Terminal Character will
+            // be already traversed.
             if (currentSuffixNode.getNodeEdges().size() == 0) {
                 // The terminal character was in the node, so it will have no other children.
                 return 1;
             }
             return getNumberOfLeafNodes(currentSuffixNode);
         } else {
-            Pair<OffsetLengthNode, String> nextNode = nextTraverse(currentSuffixNode, word, subStringWord);
+            final Pair<OffsetLengthNode, String> nextNode = nextTraverse(currentSuffixNode, subStringWord);
             if (nextNode != null) {
                 return countImpl(nextNode.getKey(), nextNode.getValue());
             } else {
@@ -99,22 +100,23 @@ public class OptimizedSuffixTrieImpl implements SuffixTrie {
     }
 
     /**
-     * Find the longest repeated substring by finding the deepest internal node
-     * in the tree. The depth is measured by characters traversed through the trie from the
-     * root to the node. The string spelled by the edges from the root to the deepest node
-     * is the longest repeated substring.
+     * Find the longest repeated substring by finding the deepest node from the root
+     * to a node containing multiple children. The depth is measured by characters
+     * traversed through the trie from the root to the node. The string spelled
+     * by the edges from the root to the deepest node is the longest repeated substring.
      * @return Longest repeated substring.
      */
+    @Override
     public String longestRepeat() {
         String deepestNodeWithMultipleChild = "";
         int deepestNodeLength = 0;
         // With every level, the traversed string is kept in the Pair followed.
         // This is done to take the string immediately instead of traverse to the SuffixNode again.
-        Queue<Pair<String, OffsetLengthNode>> allPossible = new LinkedList<>();
+        final Queue<Pair<String, OffsetLengthNode>> allPossible = new LinkedList<>();
         allPossible.add(new Pair<>(deepestNodeWithMultipleChild, head));
 
         while (!allPossible.isEmpty()) {
-            Pair<String, OffsetLengthNode> childNode = allPossible.remove();
+            final Pair<String, OffsetLengthNode> childNode = allPossible.remove();
             // The node must have at least 2 children
             if (childNode.getValue().getNodeEdges().size() > 1) {
                 // The deepness from the root to the node must be greater than the previous deepest node
@@ -123,22 +125,22 @@ public class OptimizedSuffixTrieImpl implements SuffixTrie {
                     deepestNodeLength = childNode.getKey().length();
                 }
             }
-            for (Map.Entry<OffsetLengthKey, OffsetLengthNode> entry : childNode.getValue().getNodeEdges().entrySet()) {
-                // TODO remove
-                allPossible.add(new Pair<>(childNode.getKey() + entry.getValue().offsetLengthToString(word, entry.getKey())
-                        , entry.getValue()));
+            // Add the children of the current node.
+            for (final Map.Entry<OffsetLengthKey, OffsetLengthNode> entry : childNode.getValue().getNodeEdges().entrySet()) {
+                allPossible.add(new Pair<>(childNode.getKey() + offsetLengthToString(word, entry.getKey()), entry.getValue()));
             }
         }
         return deepestNodeWithMultipleChild;
     }
 
+    @Override
     public String longestSubstring(String givenWord) {
         OffsetLengthNode currentSuffixNode = head;
-        List<String> longestString = new ArrayList<>();
+        final List<String> longestString = new ArrayList<>();
         String currentLongestString = "";
 
         while (!givenWord.isEmpty()) {
-            Pair<OffsetLengthNode, String> nextNode = nextTraverse(currentSuffixNode, word, givenWord);
+            final Pair<OffsetLengthNode, String> nextNode = nextTraverse(currentSuffixNode, givenWord);
             if (nextNode != null) {
                 currentSuffixNode = nextNode.getKey();
                 currentLongestString += givenWord.substring(0, givenWord.length() - nextNode.getValue().length());
@@ -162,25 +164,32 @@ public class OptimizedSuffixTrieImpl implements SuffixTrie {
         return Collections.max(longestString, Comparator.comparing(String::length));
     }
 
-    private OffsetLengthNode getSuffixLink(OffsetLengthNode currentNode, String word) {
+    /**
+     * Get the suffix Link of Node. This is done by passing the tail of the word you want
+     * the suffix link of.
+     * @param currentNode The current Node.
+     * @param word The tail of the word you want the suffix link of.
+     * @return The Node of the suffix link.
+     */
+    private OffsetLengthNode getSuffixLink(final OffsetLengthNode currentNode, final String word) {
         if (word.isEmpty()) {
             return currentNode;
         }
 
-        Pair<OffsetLengthNode, String> nextNode = nextTraverse(currentNode, this.word, word);
+        final Pair<OffsetLengthNode, String> nextNode = nextTraverse(currentNode, word);
         if (nextNode == null) {
             return currentNode;
         }
         return getSuffixLink(nextNode.getKey(), nextNode.getValue());
     }
 
-    // TODO print suffix in the end
+    @Override
     public void show() {
         int counter = 1;
 
         System.out.println("All the characters show the edge between 2 nodes");
         printWordInABox(word);
-        for (Map.Entry<OffsetLengthKey, OffsetLengthNode> entry : head.getNodeEdges().entrySet()) {
+        for (final Map.Entry<OffsetLengthKey, OffsetLengthNode> entry : head.getNodeEdges().entrySet()) {
             if (counter == head.getNodeEdges().size()) {
                 entry.getValue().printTrie("", true, entry.getKey());
             } else {
@@ -190,9 +199,9 @@ public class OptimizedSuffixTrieImpl implements SuffixTrie {
         }
     }
 
-    private void printWordInABox(String word) {
-        StringBuilder letters = new StringBuilder("|");
-        StringBuilder numbers = new StringBuilder("|");
+    private void printWordInABox(final String word) {
+        final StringBuilder letters = new StringBuilder("|");
+        final StringBuilder numbers = new StringBuilder("|");
 
         for (int i = 0; i < word.length(); i++) {
             letters.append(word.charAt(i)).append("|");
@@ -203,9 +212,21 @@ public class OptimizedSuffixTrieImpl implements SuffixTrie {
         System.out.println();
     }
 
-    private Pair<OffsetLengthNode, String> nextTraverse(OffsetLengthNode currentSuffixNode, String word, String inputWord) {
-        for(Map.Entry<OffsetLengthKey, OffsetLengthNode> children : currentSuffixNode.getNodeEdges().entrySet()) {
-            String childString = children.getValue().offsetLengthToString(word, children.getKey());
+    /**
+     * Move from one node to another node given the word to traverse. If it is possible to traverse it
+     * will return the new Node and the remaining string. Otherwise it will return null. The return
+     * value can be present or missing, therefore no exception will be thrown since that result
+     * is excepted (It is not an error).
+     * @param currentSuffixNode The Node you want to traverse from.
+     * @param inputWord The word inputted that want to traverse.
+     * @return null if traversing to another node is not possible otherwise {@link Pair Pair} containing
+     * the next Node and the remaining String from the input word.
+     */
+    @Nullable
+    private Pair<OffsetLengthNode, String> nextTraverse(final OffsetLengthNode currentSuffixNode,
+                                                        final String inputWord) {
+        for(final Map.Entry<OffsetLengthKey, OffsetLengthNode> children : currentSuffixNode.getNodeEdges().entrySet()) {
+            final String childString = offsetLengthToString(word, children.getKey());
             if (childString.charAt(0) == inputWord.charAt(0)) {
                 return new Pair<>(children.getValue(), determineNewWordAfterTraverse(childString, inputWord));
             }
@@ -214,7 +235,13 @@ public class OptimizedSuffixTrieImpl implements SuffixTrie {
         return null;
     }
 
-    private String determineNewWordAfterTraverse(String traverseString, String inputWord) {
+    /**
+     * Returns the new string after traversing. Multiple characters can be traversed at once.
+     * @param traverseString The traverse String.
+     * @param inputWord The input word.
+     * @return The string after removing the traversed characters from the input word.
+     */
+    private String determineNewWordAfterTraverse(final String traverseString, final String inputWord) {
         int counter = 0;
 
         while (traverseString.length() > counter && inputWord.length() > counter) {
@@ -227,17 +254,21 @@ public class OptimizedSuffixTrieImpl implements SuffixTrie {
         return inputWord.substring(counter);
     }
 
-    private int getNumberOfLeafNodes(OffsetLengthNode optimizedNode) {
+    /**
+     * Count the number of leaves from a Node.
+     * @param optimizedNode The current Node.
+     * @return Number of Leaves nodes. 0 if none found.
+     */
+    private int getNumberOfLeafNodes(final OffsetLengthNode optimizedNode) {
         int counter = 0;
-        Stack<OffsetLengthNode> allPossible = new Stack<>();
+        final Stack<OffsetLengthNode> allPossible = new Stack<>();
         allPossible.push(optimizedNode);
 
         while (!allPossible.isEmpty()) {
-            OffsetLengthNode childNodes = allPossible.pop();
-            for (Map.Entry<OffsetLengthKey, OffsetLengthNode> entry : childNodes.getNodeEdges().entrySet()) {
+            final OffsetLengthNode childNodes = allPossible.pop();
+            for (final Map.Entry<OffsetLengthKey, OffsetLengthNode> entry : childNodes.getNodeEdges().entrySet()) {
                 allPossible.push(entry.getValue());
-                entry.getValue().offsetLengthToString(word, entry.getKey());
-                if (entry.getValue().offsetLengthToString(word, entry.getKey()).contains(Character.toString(Node.TERMINAL_CHARACTER))) {
+                if (offsetLengthToString(word, entry.getKey()).contains(Character.toString(Node.TERMINAL_CHARACTER))) {
                     counter++;
                 }
             }
@@ -245,11 +276,12 @@ public class OptimizedSuffixTrieImpl implements SuffixTrie {
         return counter;
     }
 
-    private Character head(String list) {
-        return list.charAt(0);
-    }
-
-    private String tail(String list) {
+    /**
+     * Get the tail of a String.
+     * @param list The word.
+     * @return Tail of the word.
+     */
+    private String tail(final String list) {
         return list.substring(1);
     }
 

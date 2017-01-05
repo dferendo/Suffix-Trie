@@ -1,4 +1,4 @@
-import edu.um.exceptions.WordContainsTerminalCharacter;
+import edu.um.exception.WordContainsTerminalCharacterException;
 import edu.um.not_optimized_suffix_trie.SuffixTrieImpl;
 import edu.um.suffix_trie.SuffixTrie;
 
@@ -11,11 +11,11 @@ public class SuffixTrieRunner {
 
     public static void main(String[] args) {
         // If not enough arguments passed, they will be caught and the program stops.
-        try(FileReader reader = new FileReader(args[0])) {
-            BufferedReader bufferedReader = new BufferedReader(reader);
-            SuffixTrieRunner suffixTreeRunner = new SuffixTrieRunner();
+        try(final FileReader reader = new FileReader(args[0])) {
+            final BufferedReader bufferedReader = new BufferedReader(reader);
+            final SuffixTrieRunner suffixTreeRunner = new SuffixTrieRunner();
 
-            String wordForSuffixTrie = bufferedReader.readLine();
+            final String wordForSuffixTrie = bufferedReader.readLine();
             if (wordForSuffixTrie == null) {
                 System.out.println("A word was not found to build a suffix trie");
             } else {
@@ -33,14 +33,14 @@ public class SuffixTrieRunner {
             System.out.println("File not found");
         } catch (IOException e) {
             System.out.println("Error reading file " + args[0]);
-        } catch (WordContainsTerminalCharacter e) {
+        } catch (WordContainsTerminalCharacterException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    private void suffixTreeRunner(String word, String functionCall, String wordForLongestSubstring)
-            throws ArrayIndexOutOfBoundsException, WordContainsTerminalCharacter {
-        SuffixTrie suffixTrie = new SuffixTrieImpl(word);
+    private void suffixTreeRunner(final String word, final String functionCall, final String wordForLongestSubstring)
+            throws ArrayIndexOutOfBoundsException, WordContainsTerminalCharacterException {
+        final SuffixTrie suffixTrie = new SuffixTrieImpl(word);
 
         switch (functionCall) {
             case "longestRepeat" :

@@ -1,7 +1,5 @@
 package edu.um.not_optimized_suffix_trie;
 
-import edu.um.exceptions.WordContainsTerminalCharacter;
-import edu.um.suffix_trie.SuffixTrie;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

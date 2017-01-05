@@ -1,6 +1,6 @@
 package edu.um.not_optimized_suffix_trie;
 
-import edu.um.exceptions.WordContainsTerminalCharacter;
+import edu.um.exception.WordContainsTerminalCharacterException;
 import edu.um.suffix_trie.Node;
 import edu.um.suffix_trie.SuffixTrie;
 import javafx.util.Pair;
@@ -8,19 +8,20 @@ import javafx.util.Pair;
 import java.util.*;
 
 /**
- * Created by dylan on 02/12/2016.
+ * Implements a Suffix Trie that holds 1 character per edge.
  */
 public class SuffixTrieImpl implements SuffixTrie {
 
     private SuffixNode head;
 
-    public SuffixTrieImpl(final String word) throws WordContainsTerminalCharacter {
+    public SuffixTrieImpl(final String word) throws WordContainsTerminalCharacterException {
         if (word.contains(Character.toString(Node.TERMINAL_CHARACTER))) {
-            throw new WordContainsTerminalCharacter();
+            throw new WordContainsTerminalCharacterException();
         }
         buildSuffixTrie(word);
     }
 
+    @Override
     public void buildSuffixTrie(String word) {
         head = new SuffixNode();
 
@@ -33,11 +34,12 @@ public class SuffixTrieImpl implements SuffixTrie {
         head.buildPartOfTheSuffixTrie("");
     }
 
-    public boolean substring(String word) {
+    @Override
+    public boolean substring(final String word) {
         return substringImpl(head, word);
     }
 
-    private boolean substringImpl(SuffixNode currentSuffixNode, String word) {
+    private boolean substringImpl(final SuffixNode currentSuffixNode, final String word) {
         if (word.isEmpty()) {
             return true;
         } else {
@@ -49,27 +51,17 @@ public class SuffixTrieImpl implements SuffixTrie {
         }
     }
 
-    public boolean suffix(String word) {
-        return suffixImpl(head, word);
+    @Override
+    public boolean suffix(final String word) {
+        return substringImpl(head, word + Node.TERMINAL_CHARACTER);
     }
 
-    private boolean suffixImpl(SuffixNode currentSuffixNode, String word) {
-        if (word.isEmpty()) {
-            return currentSuffixNode.getNodeEdges().containsKey(Node.TERMINAL_CHARACTER);
-        } else {
-            if (currentSuffixNode.getNodeEdges().containsKey(head(word))) {
-                return suffixImpl(currentSuffixNode.getNodeEdges().get(head(word)), tail(word));
-            } else {
-                return false;
-            }
-        }
-    }
-
-    public int count(String word) {
+    @Override
+    public int count(final String word) {
         return countImpl(head, word);
     }
 
-    private int countImpl(SuffixNode currentSuffixNode, String word) {
+    private int countImpl(final SuffixNode currentSuffixNode, final String word) {
         // Traverse until the given word is empty.
         if (word.isEmpty()) {
             return getNumberOfLeafNodes(currentSuffixNode);
@@ -89,14 +81,14 @@ public class SuffixTrieImpl implements SuffixTrie {
      * @param node The edges of the SuffixNode.
      * @return The total number of leaf nodes.
      */
-    private int getNumberOfLeafNodes(SuffixNode node) {
+    private int getNumberOfLeafNodes(final SuffixNode node) {
         int counter = 0;
-        Stack<SuffixNode> allPossible = new Stack<>();
+        final Stack<SuffixNode> allPossible = new Stack<>();
         allPossible.push(node);
 
         while (!allPossible.isEmpty()) {
-            SuffixNode childNodes = allPossible.pop();
-            for (Map.Entry<Character, SuffixNode> entry : childNodes.getNodeEdges().entrySet()) {
+            final SuffixNode childNodes = allPossible.pop();
+            for (final Map.Entry<Character, SuffixNode> entry : childNodes.getNodeEdges().entrySet()) {
                 allPossible.push(entry.getValue());
                 if (entry.getKey() == Node.TERMINAL_CHARACTER) {
                     counter++;
@@ -106,29 +98,38 @@ public class SuffixTrieImpl implements SuffixTrie {
         return counter;
     }
 
+    /**
+     * To find the longest repeated substring, Breadth-first search algorithm is used.
+     * The search algorithm was preferred since it search the Suffix Trie level by level.
+     * Thus if a new SuffixNode with multiple edges is encountered, it is accepted as the new
+     * deepest SuffixNode with more than one child.
+     * @return The longest repeated substring.
+     */
+    @Override
     public String longestRepeat() {
         String deepestNodeWithMultipleChild = "";
         // With every level, the traversed string is kept in the Pair followed.
         // This is done to take the string immediately instead of traverse to the SuffixNode again.
-        Queue<Pair<String, SuffixNode>> allPossible = new LinkedList<>();
+        final Queue<Pair<String, SuffixNode>> allPossible = new LinkedList<>();
         allPossible.add(new Pair<>(deepestNodeWithMultipleChild, getHead()));
 
         while (!allPossible.isEmpty()) {
-            Pair<String, SuffixNode> childNode = allPossible.remove();
+            final Pair<String, SuffixNode> childNode = allPossible.remove();
             if (childNode.getValue().getNodeEdges().size() > 1) {
                 deepestNodeWithMultipleChild = childNode.getKey();
             }
-            for (Map.Entry<Character, SuffixNode> entry : childNode.getValue().getNodeEdges().entrySet()) {
+            for (final Map.Entry<Character, SuffixNode> entry : childNode.getValue().getNodeEdges().entrySet()) {
                 allPossible.add(new Pair<>(childNode.getKey() + entry.getKey(), entry.getValue()));
             }
         }
         return deepestNodeWithMultipleChild;
     }
 
+    @Override
     public String longestSubstring(String givenWord) {
         SuffixNode currentSuffixNode = getHead();
-        List<String> longestString = new ArrayList<>();
         String currentLongestString = "";
+        final List<String> longestString = new ArrayList<>();
 
         while (!givenWord.isEmpty()) {
             if (currentSuffixNode.getNodeEdges().containsKey(head(givenWord))) {
@@ -161,7 +162,7 @@ public class SuffixTrieImpl implements SuffixTrie {
      * @param tailOfWord The tail of the word you want the suffix link of.
      * @return The node containing the suffix link.
      */
-    private SuffixNode getSuffixLink(SuffixNode currentSuffixNode, String tailOfWord) {
+    private SuffixNode getSuffixLink(final SuffixNode currentSuffixNode, final String tailOfWord) {
         if (tailOfWord.isEmpty()) {
             return currentSuffixNode;
         } else {
@@ -169,11 +170,12 @@ public class SuffixTrieImpl implements SuffixTrie {
         }
     }
 
+    @Override
     public void show() {
         int counter = 1;
 
         System.out.println("All the characters show the edge between 2 nodes");
-        for (Map.Entry<Character, SuffixNode> entry : head.getNodeEdges().entrySet()) {
+        for (final Map.Entry<Character, SuffixNode> entry : head.getNodeEdges().entrySet()) {
             if (counter == head.getNodeEdges().size()) {
                 entry.getValue().printTrie("", true, entry.getKey());
             } else {
@@ -183,15 +185,15 @@ public class SuffixTrieImpl implements SuffixTrie {
         }
     }
 
-    public SuffixNode getHead() {
+    private SuffixNode getHead() {
         return head;
     }
 
-    private Character head(String list) {
+    private Character head(final String list) {
         return list.charAt(0);
     }
 
-    private String tail(String list) {
+    private String tail(final String list) {
         return list.substring(1);
     }
 

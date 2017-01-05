@@ -1,6 +1,5 @@
 package edu.um.not_optimized_suffix_trie;
 
-import edu.um.exceptions.WordContainsTerminalCharacter;
 import org.junit.Before;
 import org.junit.Test;
 

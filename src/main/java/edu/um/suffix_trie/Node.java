@@ -18,7 +18,7 @@ public abstract class Node<K, V> {
      * Every SuffixNode will have edges and each label of the edge is unique. Therefore
      * LinkedHashMap is used to maintain alphabetical order.
      */
-    private Map<K, V> nodeEdges = new TreeMap<>();
+    private final Map<K, V> nodeEdges = new TreeMap<>();
 
     public Map<K, V> getNodeEdges() {
         return nodeEdges;
@@ -27,8 +27,8 @@ public abstract class Node<K, V> {
     /**
      * Print part of the Suffix Trie.
      * @param line Represents a whole line.
-     * @param isTail Checks if it is the last key.
+     * @param isLast Checks if it is the last key.
      * @param key Key to be printed.
      */
-    protected void printTrie(String line, boolean isTail, K key) {}
+    protected void printTrie(final String line, final boolean isLast, final K key) {}
 }

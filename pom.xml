@@ -34,11 +34,5 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
         </dependency>
-        <!--Formatter-->
-        <!--<dependency>-->
-            <!--<groupId>com.google.googlejavaformat</groupId>-->
-            <!--<artifactId>google-java-format</artifactId>-->
-            <!--<version>1.1</version>-->
-        <!--</dependency>-->
     </dependencies>
 </project>

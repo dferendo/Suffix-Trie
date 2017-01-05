@@ -22,6 +22,6 @@ public class OffsetLengthNodeTest {
         final int offset = 1, length = 2;
         final String wordReturned = "es";
         final OffsetLengthKey offsetLengthKey = new OffsetLengthKey(offset, length);
-        Assert.assertTrue(wordReturned.equals(offsetLengthNode.offsetLengthToString(word, offsetLengthKey)));
+        Assert.assertTrue(wordReturned.equals(OffsetLengthNode.offsetLengthToString(word, offsetLengthKey)));
     }
 }
