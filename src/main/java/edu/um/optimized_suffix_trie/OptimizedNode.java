@@ -1,6 +1,6 @@
-package edu.um.OptimizedSuffixTrie;
+package edu.um.optimized_suffix_trie;
 
-import edu.um.SuffixTrie.Node;
+import edu.um.suffix_trie.Node;
 import java.util.Map;
 
 /**

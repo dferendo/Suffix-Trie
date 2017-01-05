@@ -1,4 +1,4 @@
-package edu.um.SuffixTrie;
+package edu.um.suffix_trie;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -24,7 +24,11 @@ public abstract class Node<K, V> {
         return nodeEdges;
     }
 
-    protected void setNodeEdges(Map<K, V> nodeEdges) {
-        this.nodeEdges = nodeEdges;
-    }
+    /**
+     * Print part of the Suffix Trie.
+     * @param line Represents a whole line.
+     * @param isTail Checks if it is the last key.
+     * @param key Key to be printed.
+     */
+    protected void printTrie(String line, boolean isTail, K key) {}
 }

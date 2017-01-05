@@ -1,22 +1,23 @@
-package edu.um.NotOptimizedSuffixTrie;
+package edu.um.optimized_suffix_trie;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
- * Testing for SuffixTrieImpl.
+ * {@link edu.um.not_optimized_suffix_trie.SuffixTrieImplTest SuffixTrieImplTest} tests still apply for
+ * the optimized OptimizedSuffixTrieImpl, so they will be recycled.
  */
+public class OptimizedSuffixTrieImplTest {
 
-public class SuffixTrieImplTest {
-
-    private SuffixTrieImpl suffixTrie;
+    private OptimizedSuffixTrieImpl suffixTrie;
     private final String WORD_TEST = "hahaa";
 
     @Before
-    public void setUp() {
-        suffixTrie = new SuffixTrieImpl(WORD_TEST);
+    public void setUp() throws Exception {
+        suffixTrie = new OptimizedSuffixTrieImpl(WORD_TEST);
     }
 
     @Test
@@ -105,26 +106,5 @@ public class SuffixTrieImplTest {
     public void count_substringAppearNoWhere() {
         final String substring = "aah";
         assertTrue(suffixTrie.count(substring) == 0);
-    }
-
-    @Test
-    public void longestSubstring_startingFromBeginningOfList() {
-        final String substring = "hac";
-        final String longestSubstring = "ha";
-        assertTrue(suffixTrie.longestSubstring(substring).equals(longestSubstring));
-    }
-
-    @Test
-    public void longestSubstring_startingFromEndingOfList() {
-        final String substring = "chdhaa";
-        final String longestSubstring = "haa";
-        assertTrue(suffixTrie.longestSubstring(substring).equals(longestSubstring));
-    }
-
-    @Test
-    public void longestSubstring_startingFromMiddleOfList() {
-        final String substring = "nmndahanbch";
-        final String longestSubstring = "aha";
-        assertTrue(suffixTrie.longestSubstring(substring).equals(longestSubstring));
     }
 }

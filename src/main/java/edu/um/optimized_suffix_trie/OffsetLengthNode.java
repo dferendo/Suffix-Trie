@@ -1,6 +1,6 @@
-package edu.um.OptimizedSuffixTrie;
+package edu.um.optimized_suffix_trie;
 
-import edu.um.SuffixTrie.Node;
+import edu.um.suffix_trie.Node;
 import java.util.Map;
 
 /**
@@ -21,6 +21,20 @@ public class OffsetLengthNode extends Node<OffsetLengthKey, OffsetLengthNode> {
 
     protected String offsetLengthToString(String word, OffsetLengthKey offsetLength) {
         return word.substring(offsetLength.getOffset(), offsetLength.getOffset() + offsetLength.getLength());
+    }
+
+    protected void printTrie(String line, boolean isTail, OffsetLengthKey key) {
+        int counter = 0;
+
+        System.out.println(line + (isTail ? "└── " : "├── ") + key.toString());
+        for (Map.Entry<OffsetLengthKey, OffsetLengthNode> entry : getNodeEdges().entrySet()) {
+            if (counter == getNodeEdges().size() - 1) {
+                entry.getValue().printTrie(line + (isTail ? "    " : "│   "), true, entry.getKey());
+            } else {
+                entry.getValue().printTrie(line + (isTail ? "    " : "│   "), false, entry.getKey());
+            }
+            counter++;
+        }
     }
 }
 

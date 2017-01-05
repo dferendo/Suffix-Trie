@@ -1,4 +1,4 @@
-package edu.um.SuffixTrie;
+package edu.um.suffix_trie;
 
 /**
  * Created by dylan on 02/12/2016.

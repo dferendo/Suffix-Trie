@@ -1,6 +1,6 @@
-package edu.um.NotOptimizedSuffixTrie;
+package edu.um.not_optimized_suffix_trie;
 
-import edu.um.SuffixTrie.Node;
+import edu.um.suffix_trie.Node;
 import java.util.Map;
 
 /**
@@ -33,10 +33,10 @@ public class SuffixNode extends Node<Character, SuffixNode> {
         }
     }
 
-    public void printTrie(String line, boolean isTail, Character name) {
+    public void printTrie(String line, boolean isTail, Character key) {
         int counter = 0;
 
-        System.out.println(line + (isTail ? "└── " : "├── ") + name);
+        System.out.println(line + (isTail ? "└── " : "├── ") + key);
         for (Map.Entry<Character, SuffixNode> entry : getNodeEdges().entrySet()) {
             if (counter == getNodeEdges().size() - 1) {
                 entry.getValue().printTrie(line + (isTail ? "    " : "│   "), true, entry.getKey());;

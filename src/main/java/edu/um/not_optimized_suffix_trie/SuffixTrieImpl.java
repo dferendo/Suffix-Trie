@@ -1,7 +1,8 @@
-package edu.um.NotOptimizedSuffixTrie;
+package edu.um.not_optimized_suffix_trie;
 
-import edu.um.SuffixTrie.Node;
-import edu.um.SuffixTrie.SuffixTrie;
+import edu.um.exceptions.WordContainsTerminalCharacter;
+import edu.um.suffix_trie.Node;
+import edu.um.suffix_trie.SuffixTrie;
 import javafx.util.Pair;
 
 import java.util.*;
@@ -13,7 +14,10 @@ public class SuffixTrieImpl implements SuffixTrie {
 
     private SuffixNode head;
 
-    public SuffixTrieImpl(final String word) {
+    public SuffixTrieImpl(final String word) throws WordContainsTerminalCharacter {
+        if (word.contains(Character.toString(Node.TERMINAL_CHARACTER))) {
+            throw new WordContainsTerminalCharacter();
+        }
         buildSuffixTrie(word);
     }
 

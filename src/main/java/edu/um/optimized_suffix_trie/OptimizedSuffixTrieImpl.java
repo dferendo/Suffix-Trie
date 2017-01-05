@@ -1,7 +1,8 @@
-package edu.um.OptimizedSuffixTrie;
+package edu.um.optimized_suffix_trie;
 
-import edu.um.SuffixTrie.Node;
-import edu.um.SuffixTrie.SuffixTrie;
+import edu.um.exceptions.WordContainsTerminalCharacter;
+import edu.um.suffix_trie.Node;
+import edu.um.suffix_trie.SuffixTrie;
 import javafx.util.Pair;
 
 import java.util.*;
@@ -14,7 +15,10 @@ public class OptimizedSuffixTrieImpl implements SuffixTrie {
     private OffsetLengthNode head;
     private String word;
 
-    public OptimizedSuffixTrieImpl(final String word) {
+    public OptimizedSuffixTrieImpl(final String word) throws WordContainsTerminalCharacter {
+        if (word.contains(Character.toString(Node.TERMINAL_CHARACTER))) {
+            throw new WordContainsTerminalCharacter();
+        }
         this.word = word + Node.TERMINAL_CHARACTER;
         buildSuffixTrie(word);
     }
@@ -170,23 +174,33 @@ public class OptimizedSuffixTrieImpl implements SuffixTrie {
         return getSuffixLink(nextNode.getKey(), nextNode.getValue());
     }
 
+    // TODO print suffix in the end
     public void show() {
-//        Queue<OffsetLengthNode> allPossible = new LinkedList<>();
-//        allPossible.add(head);
-//        allPossible.add(null);
-//
-//        while (!allPossible.isEmpty()) {
-//            OptimizedNode childNodes = allPossible.remove();
-//            if (childNodes == null) {
-//                System.out.println();
-//                continue;
-//            }
-//            for (Map.Entry<String , OptimizedNode> entry : childNodes.getNodeEdges().entrySet()) {
-//                System.out.print(entry.getKey() + " ");
-//                allPossible.add(entry.getValue());
-//            }
-//            allPossible.add(null);
-//        }
+        int counter = 1;
+
+        System.out.println("All the characters show the edge between 2 nodes");
+        printWordInABox(word);
+        for (Map.Entry<OffsetLengthKey, OffsetLengthNode> entry : head.getNodeEdges().entrySet()) {
+            if (counter == head.getNodeEdges().size()) {
+                entry.getValue().printTrie("", true, entry.getKey());
+            } else {
+                entry.getValue().printTrie("", false, entry.getKey());
+            }
+            counter++;
+        }
+    }
+
+    private void printWordInABox(String word) {
+        StringBuilder letters = new StringBuilder("|");
+        StringBuilder numbers = new StringBuilder("|");
+
+        for (int i = 0; i < word.length(); i++) {
+            letters.append(word.charAt(i)).append("|");
+            numbers.append(i).append("|");
+        }
+        System.out.println(letters);
+        System.out.println(numbers);
+        System.out.println();
     }
 
     private Pair<OffsetLengthNode, String> nextTraverse(OffsetLengthNode currentSuffixNode, String word, String inputWord) {

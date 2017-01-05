@@ -1,4 +1,4 @@
-package edu.um.OptimizedSuffixTrie;
+package edu.um.optimized_suffix_trie;
 
 /**
  * Holds the offset and length as a Pair. Since TreeMap is being used, Comparable is needed
