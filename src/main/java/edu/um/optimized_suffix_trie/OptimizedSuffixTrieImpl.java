@@ -1,6 +1,5 @@
 package edu.um.optimized_suffix_trie;
 
-import com.sun.istack.internal.Nullable;
 import edu.um.exception.WordContainsTerminalCharacterException;
 import edu.um.suffix_trie.Node;
 import edu.um.suffix_trie.SuffixTrie;
@@ -40,7 +39,6 @@ public class OptimizedSuffixTrieImpl implements SuffixTrie {
 
     private OptimizedNode buildSuffixTrieWithString(String word) {
         final OptimizedNode head = new OptimizedNode();
-        word += Node.TERMINAL_CHARACTER;
 
         while (!word.isEmpty()) {
             head.buildPartOfTheSuffixTrie(word);
@@ -222,7 +220,6 @@ public class OptimizedSuffixTrieImpl implements SuffixTrie {
      * @return null if traversing to another node is not possible otherwise {@link Pair Pair} containing
      * the next Node and the remaining String from the input word.
      */
-    @Nullable
     private Pair<OffsetLengthNode, String> nextTraverse(final OffsetLengthNode currentSuffixNode,
                                                         final String inputWord) {
         for(final Map.Entry<OffsetLengthKey, OffsetLengthNode> children : currentSuffixNode.getNodeEdges().entrySet()) {

@@ -24,11 +24,4 @@ public abstract class Node<K, V> {
         return nodeEdges;
     }
 
-    /**
-     * Print part of the Suffix Trie.
-     * @param line Represents a whole line.
-     * @param isLast Checks if it is the last key.
-     * @param key Key to be printed.
-     */
-    protected void printTrie(final String line, final boolean isLast, final K key) {}
 }

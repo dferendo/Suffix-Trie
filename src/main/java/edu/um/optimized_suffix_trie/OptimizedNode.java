@@ -17,7 +17,7 @@ public class OptimizedNode extends Node<String, OptimizedNode> {
      * as edges of the new key. The edges of the old key, will be added to the the corresponding parent.
      * @param word The word to build part of the Suffix Trie of.
      */
-    protected void buildPartOfTheSuffixTrie(final String word) {
+    void buildPartOfTheSuffixTrie(final String word) {
         final Map<String, OptimizedNode> leaves = getNodeEdges();
         if (leaves.size() == 0) {
             leaves.put(word, new OptimizedNode());

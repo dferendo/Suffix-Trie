@@ -6,10 +6,10 @@ import static org.junit.Assert.*;
 /**
  * Created by dylan on 03/12/2016.
  * Examples taken from
- * @see <a href="http://www.geeksforgeeks.org/suffix-tree-application-3-longest-repeated-substring/">
+ * <a href="http://www.geeksforgeeks.org/suffix-tree-application-3-longest-repeated-substring/">
  *     Examples of longestRepeat</a>
  * and also from
- * @see <a href="http://www.geeksforgeeks.org/suffix-tree-application-5-longest-common-substring-2/">
+ * <a href="http://www.geeksforgeeks.org/suffix-tree-application-5-longest-common-substring-2/">
  *     Examples of longestSubstring</a>
  * Taken on 4th December 2016.
  */

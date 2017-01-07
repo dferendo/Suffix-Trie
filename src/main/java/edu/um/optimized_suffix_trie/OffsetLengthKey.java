@@ -27,7 +27,6 @@ public class OffsetLengthKey implements Comparable<OffsetLengthKey> {
         }
     }
 
-    @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (!(o instanceof OffsetLengthKey)) return false;

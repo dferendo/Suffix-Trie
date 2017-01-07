@@ -17,7 +17,7 @@ public class OffsetLengthNode extends Node<OffsetLengthKey, OffsetLengthNode> {
      * @param head The current node.
      * @param word The word the Trie is built on.
      */
-    protected void buildOptimizedSuffixTrie(final OptimizedNode head, final String word) {
+    void buildOptimizedSuffixTrie(final OptimizedNode head, final String word) {
         // Loop through all nodes and turn them to offset, length
         for (final Map.Entry<String, OptimizedNode> entry : head.getNodeEdges().entrySet()) {
             final String oldKeyString = entry.getKey();
@@ -34,12 +34,17 @@ public class OffsetLengthNode extends Node<OffsetLengthKey, OffsetLengthNode> {
      * @param offsetLengthKey The key to be transferred.
      * @return The String for a key.
      */
-    protected static String offsetLengthToString(final String word, final OffsetLengthKey offsetLengthKey) {
+    static String offsetLengthToString(final String word, final OffsetLengthKey offsetLengthKey) {
         return word.substring(offsetLengthKey.getOffset(), offsetLengthKey.getOffset() + offsetLengthKey.getLength());
     }
 
-    @Override
-    protected void printTrie(final String line, final boolean isLast, final OffsetLengthKey key) {
+    /**
+     * Print part of the Suffix Trie with offset, length.
+     * @param line Represents a whole line.
+     * @param isLast Checks if it is the last key.
+     * @param key Key to be printed.
+     */
+    void printTrie(final String line, final boolean isLast, final OffsetLengthKey key) {
         int counter = 0;
 
         System.out.println(line + (isLast ? "└── " : "├── ") + key.toString());

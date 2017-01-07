@@ -18,7 +18,7 @@ public class SuffixNode extends Node<Character, SuffixNode> {
      * The new node is passed to the method and the tail of the word is given again.
      * @param word The word needed to be build.
      */
-    public void buildPartOfTheSuffixTrie(final String word) {
+    void buildPartOfTheSuffixTrie(final String word) {
         if (word.isEmpty()) {
             getNodeEdges().put(TERMINAL_CHARACTER, new SuffixNode());
         } else {
@@ -33,8 +33,13 @@ public class SuffixNode extends Node<Character, SuffixNode> {
         }
     }
 
-    @Override
-    public void printTrie(final String line, final boolean isLast, final Character key) {
+    /**
+     * Print part of the Suffix Trie.
+     * @param line Represents a whole line.
+     * @param isLast Checks if it is the last key.
+     * @param key Key to be printed.
+     */
+     void printTrie(final String line, final boolean isLast, final Character key) {
         int counter = 0;
 
         System.out.println(line + (isLast ? "└── " : "├── ") + key);
@@ -48,12 +53,11 @@ public class SuffixNode extends Node<Character, SuffixNode> {
         }
     }
 
-    private Character head(final String list) {
+    private static Character head(final String list) {
         return list.charAt(0);
     }
 
-    private String tail(final String list) {
+    private static String tail(final String list) {
         return list.substring(1);
     }
-
 }
