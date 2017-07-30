@@ -17,7 +17,7 @@ Value. The terminal character is set to ~. No ways connecting the terminal chara
 accepted. Suffix Trie have common functionality between different versions of it, therefore an
 interface containing these functions was made.
 
-Starting off with the unoptimized Suffix Trie refer to the figure below. Each outgoing edge from the node
+Starting off with the unoptimized Suffix Trie, the uml diagram can be found in the figure below. Each outgoing edge from the node
 contains only one character. The class SuffixNode extends Node with type parameters
 Character as K and SuffixNode as V. SuffixTrieImpl was also created. It holds only the
 root/head SuffixNode needed to be able to use the Trie. The head is a single SuffixNode that
@@ -41,3 +41,11 @@ length) to String.
 ![Image](docs/UML_Part1.jpg?raw=true "UML diagram for Suffix part 1")
 
 ![Image](docs/UML_Part2.jpg?raw=true "UML diagram for Suffix part 2")
+
+## License
+
+This project is licensed under MIT.
+
+## Future Updates
+
+For the optimized suffix trie, Ukkonen's algorithm can be used to achieve better time complexity.
